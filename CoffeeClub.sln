@@ -3,15 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoffeeClub", "CoffeeClub\CoffeeClub.csproj", "{5406D558-EEFE-495E-878C-D4EBE264FA7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoffeeClub", "CoffeeClub\CoffeeClub.csproj", "{5406D558-EEFE-495E-878C-D4EBE264FA7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{81BFDA39-3333-48A3-9E9E-7F08E7ECCD57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{81BFDA39-3333-48A3-9E9E-7F08E7ECCD57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{12670B82-F561-4077-9DE5-FAE42DCCD690}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{12670B82-F561-4077-9DE5-FAE42DCCD690}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerService", "LoggerService\LoggerService.csproj", "{AF3732FE-A5DA-479E-B9E6-04813D365C50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerService", "LoggerService\LoggerService.csproj", "{AF3732FE-A5DA-479E-B9E6-04813D365C50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{575BF721-39FC-4A9B-BAB7-911F43834E1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{575BF721-39FC-4A9B-BAB7-911F43834E1C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DD979D01-D986-46C3-B080-58C90D09F891}"
+	ProjectSection(SolutionItems) = preProject
+		DatabaseCreation.sql = DatabaseCreation.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

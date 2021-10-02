@@ -1,0 +1,40 @@
+﻿CREATE DATABASE [CoffeeClub]
+GO
+
+USE [CoffeeClub]
+GO
+
+CREATE TABLE [dbo].[Comments](
+	[CommentId] [int] IDENTITY(1,1) NOT NULL,
+	[Comment] [nvarchar](max) NULL,
+	[Rating] [int] NOT NULL,
+	[DateCreated] [datetime2](7) NOT NULL,
+	[CoffeeId] [int] NOT NULL,
+ CONSTRAINT [PK_Comments] PRIMARY KEY CLUSTERED 
+(
+	[CommentId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Coffees](
+	[CoffeeId] [int] IDENTITY(1,1) NOT NULL,
+	[CoffeeName] [nvarchar](max) NULL,
+	[CoffeePrice] [float] NOT NULL,
+	[CountryOfOrigin] [nvarchar](max) NULL,
+ CONSTRAINT [PK_Coffees] PRIMARY KEY CLUSTERED 
+(
+	[CoffeeId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+
+ALTER TABLE [dbo].[Comments]  WITH CHECK ADD  CONSTRAINT [FK_Comments_Coffees_CoffeeId] FOREIGN KEY([CoffeeId])
+REFERENCES [dbo].[Coffees] ([CoffeeId])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[Comments] CHECK CONSTRAINT [FK_Comments_Coffees_CoffeeId]
+GO
