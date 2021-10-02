@@ -33,7 +33,9 @@ namespace CoffeeClub
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
             services.AddDbContext<CoffeeClubContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("sqlConnection")));
             services.AddSwaggerGen(c =>

@@ -42,8 +42,8 @@ namespace Repository
         
             await FindByCondition(coffee => coffee.CoffeeId.Equals(coffeeId), trackChanges)
                 .Include(comment => comment.Comments)
-                .SingleOrDefaultAsync();        
-        
+                .FirstOrDefaultAsync();
+
         public void UpdateCoffee(Coffee coffee)
         {
             Update(coffee);

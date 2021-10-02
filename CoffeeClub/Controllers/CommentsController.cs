@@ -26,15 +26,15 @@ namespace CoffeeClub.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet(Name = "GetComments")]
-        public async Task<IActionResult> GetComments()
-        {
-            var comments = await _repository.Comments.GetAllCommentsAsync(trackChanges: false);
+        //[HttpGet(Name = "GetComments")]
+        //public async Task<IActionResult> GetComments()
+        //{
+        //    var comments = await _repository.Comments.GetAllCommentsAsync(trackChanges: false);
 
-            var commentsDto = _mapper.Map<IEnumerable<CommentsDTO>>(comments);
+        //    var commentsDto = _mapper.Map<IEnumerable<CommentsDTO>>(comments);
 
-            return Ok(commentsDto);
-        }
+        //    return Ok(commentsDto);
+        //}
 
         [HttpGet("{id}", Name = "CommentById")]
         public async Task<IActionResult> GetComment(int id)

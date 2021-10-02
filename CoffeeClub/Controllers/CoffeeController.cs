@@ -137,30 +137,54 @@ namespace CoffeeClub.Controllers
             }
         }
 
-        //[HttpGet("{id}/comments")]
-        //public async Task<IActionResult> GetCoffeeWithDetails(int id)
-        //{
-        //    try
-        //    {
-        //        var coffee = await _repository.Coffee.GetCoffeeWithDetails(id, trackChanges: false);
-        //        if (coffee == null)
-        //        {
-        //            _logger.LogError($"Coffee with id: {id}, hasn't been found in db.");
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            _logger.LogInfo($"Returned coffee with details for id: {id}");
+        [HttpGet("{id}/comments")]
+        public async Task<IActionResult> GetCoffeeWithDetails(int id)
+        {
+            try
+            {
+                var coffee = await _repository.Coffee.GetCoffeeWithDetails(id, trackChanges: false);
+                if (coffee == null)
+                {
+                    _logger.LogError($"Coffee with id: {id}, hasn't been found in db.");
+                    return NotFound();
+                }
+                else
+                {
+                    _logger.LogInfo($"Returned coffee with details for id: {id}");
 
-        //            var coffeeResult = _mapper.Map<CoffeeDTO>(coffee);
-        //            return Ok(coffeeResult);
-        //        }
-        //    }
-        //    catch (Exception ex)
+                    return Ok(coffee);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside GetCoffeeWithDetails action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        //[HttpGet]
+        //public async Task<IActionResult> GetEmployeesForCompany(Guid companyId, [FromQuery]
+        //    EmployeeParameters employeeParameters)
+        //{
+        //    if (!employeeParameters.ValidAgeRange)
+        //        return BadRequest("Max age can't be less than min age.");
+
+        //    var company = await _repository.Company.GetCompanyAsync(companyId, trackChanges:
+        //        false);
+        //    if (company == null)
+
         //    {
-        //        _logger.LogError($"Something went wrong inside GetCoffeeWithDetails action: {ex.Message}");
-        //        return StatusCode(500, "Internal server error");
+        //        _logger.LogInfo($"Company with id: {companyId} doesn't exist in the database.");
+        //        return NotFound();
         //    }
+        //    var employeesFromDb = await _repository.Employee.GetEmployeesAsync(companyId, employeeParameters, trackChanges: false);
+        //    Response.Headers.Add("X-Pagination",
+        //        JsonSerializer.Serialize(employeesFromDb.MetaData));
+        //    var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employeesFromDb);
+        //    var links = _employeeLinks.TryGenerateLinks(employeesDto,
+        //        employeeParameters.Fields, companyId, HttpContext);
+        //    return links.HasLinks ? Ok(links.LinkedEntities) : Ok(links.ShapedEntities);
+
         //}
     }
 }
