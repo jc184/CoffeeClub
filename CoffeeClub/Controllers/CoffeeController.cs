@@ -161,30 +161,5 @@ namespace CoffeeClub.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
-        //[HttpGet]
-        //public async Task<IActionResult> GetEmployeesForCompany(Guid companyId, [FromQuery]
-        //    EmployeeParameters employeeParameters)
-        //{
-        //    if (!employeeParameters.ValidAgeRange)
-        //        return BadRequest("Max age can't be less than min age.");
-
-        //    var company = await _repository.Company.GetCompanyAsync(companyId, trackChanges:
-        //        false);
-        //    if (company == null)
-
-        //    {
-        //        _logger.LogInfo($"Company with id: {companyId} doesn't exist in the database.");
-        //        return NotFound();
-        //    }
-        //    var employeesFromDb = await _repository.Employee.GetEmployeesAsync(companyId, employeeParameters, trackChanges: false);
-        //    Response.Headers.Add("X-Pagination",
-        //        JsonSerializer.Serialize(employeesFromDb.MetaData));
-        //    var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employeesFromDb);
-        //    var links = _employeeLinks.TryGenerateLinks(employeesDto,
-        //        employeeParameters.Fields, companyId, HttpContext);
-        //    return links.HasLinks ? Ok(links.LinkedEntities) : Ok(links.ShapedEntities);
-
-        //}
     }
 }
