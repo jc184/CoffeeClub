@@ -15,6 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Cont
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DD979D01-D986-46C3-B080-58C90D09F891}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\..\Desktop\CoffeeClub.postman_collection.json = ..\..\..\Desktop\CoffeeClub.postman_collection.json
 		DatabaseCreation.sql = DatabaseCreation.sql
 	EndProjectSection
 EndProject
