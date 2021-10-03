@@ -1,0 +1,186 @@
+{
+	"info": {
+		"_postman_id": "89e66436-89af-4d09-8246-bde65c048b12",
+		"name": "CoffeeClub",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetCoffeeWithDetails",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44353/api/coffee/1/comments",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44353",
+					"path": [
+						"api",
+						"coffee",
+						"1",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddCoffee",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"coffeeName\": \"Bolivian Blend\",\r\n  \"coffeePrice\": 5.25,\r\n  \"countryOfOrigin\": \"Bolivia\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44353/api/coffee",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44353",
+					"path": [
+						"api",
+						"coffee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListAllCoffees",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44353/api/coffee",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44353",
+					"path": [
+						"api",
+						"coffee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteCoffee",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44353/api/coffee/4",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44353",
+					"path": [
+						"api",
+						"coffee",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddRatingAndComment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"comment\": \"Lovely Tasting coffee\",\r\n  \"rating\": 4,\r\n  \"dateCreated\": \"2021-10-03T10:15:26.401Z\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44353/api/coffee/1/comments",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44353",
+					"path": [
+						"api",
+						"coffee",
+						"1",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListAllComments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44353/api/coffee/1/comments",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44353",
+					"path": [
+						"api",
+						"coffee",
+						"1",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateRatingAndComment",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"comment\": \"Beautiful Tasting Coffee\",\r\n  \"rating\": 5,\r\n  \"dateCreated\": \"2021-10-03T10:17:57.727Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44353/api/coffee/1/comments/5",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44353",
+					"path": [
+						"api",
+						"coffee",
+						"1",
+						"comments",
+						"5"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
