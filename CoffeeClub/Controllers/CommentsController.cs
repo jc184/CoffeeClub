@@ -69,7 +69,7 @@ namespace CoffeeClub.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCommentForCoffee(int coffeeId, [FromBody] CommentsForCreationDTO comment)
         {
-            var coffee = await _repository.Coffee.GetCoffeeById(coffeeId, trackChanges: false);
+            var coffee = await _repository.Coffee.GetCoffeeByIdAsync(coffeeId, trackChanges: false);
             if (coffee == null)
             {
                 _logger.LogInfo($"Coffee with id: {coffeeId} doesn't exist in the database.");

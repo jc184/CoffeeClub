@@ -32,13 +32,13 @@ namespace Repository
                 .ToListAsync();
         
 
-        public async Task<Coffee> GetCoffeeById(int coffeeId, bool
+        public async Task<Coffee> GetCoffeeByIdAsync(int coffeeId, bool
             trackChanges) =>
             await FindByCondition(coffee => coffee.CoffeeId.Equals(coffeeId), trackChanges)
             .SingleOrDefaultAsync();
         
 
-        public async Task<Coffee> GetCoffeeWithDetails(int coffeeId, bool trackChanges) =>
+        public async Task<Coffee> GetCoffeeWithDetailsAsync(int coffeeId, bool trackChanges) =>
         
             await FindByCondition(coffee => coffee.CoffeeId.Equals(coffeeId), trackChanges)
                 .Include(comment => comment.Comments)

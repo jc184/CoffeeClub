@@ -40,7 +40,7 @@ namespace CoffeeClub.Controllers
         [HttpGet("{id}", Name = "CoffeeById")]
         public async Task<IActionResult> GetCoffee(int id)
         {
-            var coffee = await _repository.Coffee.GetCoffeeById(id, trackChanges: false);
+            var coffee = await _repository.Coffee.GetCoffeeByIdAsync(id, trackChanges: false);
 
             if (coffee == null)
             {
@@ -74,7 +74,7 @@ namespace CoffeeClub.Controllers
         {
             try
             {
-                var coffee = await _repository.Coffee.GetCoffeeById(id, trackChanges: false);
+                var coffee = await _repository.Coffee.GetCoffeeByIdAsync(id, trackChanges: false);
                 if (coffee == null)
                 {
                     _logger.LogError($"Coffee with id: {id}, hasn't been found in db.");
@@ -116,7 +116,7 @@ namespace CoffeeClub.Controllers
                     return BadRequest("Invalid model object");
                 }
 
-                var coffeeEntity = await _repository.Coffee.GetCoffeeById(id, trackChanges: false);
+                var coffeeEntity = await _repository.Coffee.GetCoffeeByIdAsync(id, trackChanges: false);
                 if (coffeeEntity == null)
                 {
                     _logger.LogError($"Coffee with id: {id}, hasn't been found in db.");
@@ -142,7 +142,7 @@ namespace CoffeeClub.Controllers
         {
             try
             {
-                var coffee = await _repository.Coffee.GetCoffeeWithDetails(id, trackChanges: false);
+                var coffee = await _repository.Coffee.GetCoffeeWithDetailsAsync(id, trackChanges: false);
                 if (coffee == null)
                 {
                     _logger.LogError($"Coffee with id: {id}, hasn't been found in db.");
