@@ -1,6 +1,7 @@
 using AutoMapper;
 using Contracts;
 using Entities;
+using FluentValidation.AspNetCore;
 using LoggerService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,6 +37,16 @@ namespace CoffeeClub
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
+            services
+                .AddMvcCore()
+                .AddApiExplorer()
+                .AddFluentValidation(s =>
+                {
+                    s.RegisterValidatorsFromAssemblyContaining<Startup>();
+                    s.DisableDataAnnotationsValidation = true;
+                    s.AutomaticValidationEnabled = true;
+                    s.ImplicitlyValidateChildProperties = true;
+                });
             services.AddDbContext<CoffeeClubContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("sqlConnection")));
             services.AddSwaggerGen(c =>
