@@ -27,7 +27,7 @@ namespace Repository
             Delete(coffee);
         }
 
-        public async Task<IEnumerable<Coffee>> GetAllCoffeesAsync(bool trackChanges) =>
+        public async Task<List<Coffee>> GetAllCoffeesAsync(bool trackChanges) =>
                await FindAll(trackChanges)
                 .OrderBy(c => c.CoffeeName)
                 .ToListAsync();

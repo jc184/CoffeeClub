@@ -9,7 +9,7 @@ namespace Contracts
 {
     public interface ICoffeeRepository : IRepositoryBase<Coffee>
     {
-        Task<IEnumerable<Coffee>> GetAllCoffeesAsync(bool trackChanges);
+        Task<List<Coffee>> GetAllCoffeesAsync(bool trackChanges);
         Task<Coffee> GetCoffeeByIdAsync(int coffeeId, bool trackChanges);
         Task<Coffee> GetCoffeeWithDetailsAsync(int coffeeId, bool trackChanges);
         void CreateCoffee(Coffee coffee);
