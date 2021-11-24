@@ -27,7 +27,7 @@ namespace Repository
             Delete(comment);
         }
 
-        public async Task<IEnumerable<Comments>> GetAllCommentsAsync(bool trackChanges) =>
+        public async Task<List<Comments>> GetAllCommentsAsync(bool trackChanges) =>
             await FindAll(trackChanges)
                 .OrderBy(co => co.Comment)
                 .ToListAsync();

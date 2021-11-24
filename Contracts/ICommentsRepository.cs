@@ -9,7 +9,7 @@ namespace Contracts
 {
     public interface ICommentsRepository : IRepositoryBase<Comments>
     {
-        Task<IEnumerable<Comments>> GetAllCommentsAsync(bool trackChanges);
+        Task<List<Comments>> GetAllCommentsAsync(bool trackChanges);
         Task<Comments> GetCommentByIdAsync(int commentId, bool trackChanges);
         void CreateComment(int coffeeId, Comments comment);
         void UpdateComment(Comments comment);

@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.DTOs;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -16,6 +17,7 @@ namespace CoffeeClubUnitTests
     public class CoffeeRepositoryTests
     {
         private readonly Mock<ICoffeeRepository> _mockRepo;
+
         public CoffeeRepositoryTests()
         {
             _mockRepo = new Mock<ICoffeeRepository>();
@@ -79,6 +81,25 @@ namespace CoffeeClubUnitTests
             int coffeeId = 1;
             bool trackChanges = false;
             var coffee = coffeeRepoMock.GetCoffeeWithDetailsAsync(coffeeId, trackChanges).Result;
+
+            //Assert
+            Assert.NotNull(coffee);
+            Assert.IsAssignableFrom<Coffee>(coffee);
+        }
+
+        [Fact]
+        public void CreateCoffee_Returns_Coffee()
+        {
+            //Setup DbContext and DbSet mock
+            var dbContextMock = new Mock<CoffeeClubContext>();
+            var dbSetMock = new Mock<DbSet<Coffee>>();
+            dbSetMock.Setup(s => s.FindAsync(It.IsAny<int>(), It.IsAny<bool>())).Returns(ValueTask.FromResult(new Coffee()));
+            dbContextMock.Setup(s => s.Set<Coffee>()).Returns(dbSetMock.Object);
+
+            _mockRepo.Setup(p => p.CreateCoffee(new Coffee()));
+            var coffeeRepoMock = _mockRepo.Object;
+            var coffee = new Coffee() { CoffeeId = 1, CoffeeName = "some coffee name", CoffeePrice = 5.00, CountryOfOrigin = "somecountry" };
+            coffeeRepoMock.CreateCoffee(coffee);
 
             //Assert
             Assert.NotNull(coffee);
