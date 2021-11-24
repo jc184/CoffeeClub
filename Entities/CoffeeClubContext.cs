@@ -10,6 +10,10 @@ namespace Entities
 {
     public class CoffeeClubContext : DbContext
     {
+        public CoffeeClubContext()
+        {
+
+        }
         public CoffeeClubContext(DbContextOptions options)
             : base(options)
         {
