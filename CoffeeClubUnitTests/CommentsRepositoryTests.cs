@@ -81,5 +81,24 @@ namespace CoffeeClubUnitTests
             Assert.NotNull(comment);
             Assert.IsAssignableFrom<Comments>(comment);
         }
+
+        [Fact]
+        public void UpdateComment_Returns_Comment()
+        {
+            //Setup DbContext and DbSet mock
+            var dbContextMock = new Mock<CoffeeClubContext>();
+            var dbSetMock = new Mock<DbSet<Comments>>();
+            dbSetMock.Setup(s => s.FindAsync(It.IsAny<int>(), It.IsAny<bool>())).Returns(ValueTask.FromResult(new Comments()));
+            dbContextMock.Setup(s => s.Set<Comments>()).Returns(dbSetMock.Object);
+
+            _mockRepo.Setup(p => p.UpdateComment(new Comments()));
+            var commentRepoMock = _mockRepo.Object;
+            var comment = new Comments() { Comment = "some comment", DateCreated = DateTime.Now, Rating = 5 };
+            commentRepoMock.UpdateComment(comment);
+
+            //Assert
+            Assert.NotNull(comment);
+            Assert.IsAssignableFrom<Comments>(comment);
+        }
     }
 }

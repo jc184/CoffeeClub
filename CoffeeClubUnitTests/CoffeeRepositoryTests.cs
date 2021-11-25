@@ -105,5 +105,24 @@ namespace CoffeeClubUnitTests
             Assert.NotNull(coffee);
             Assert.IsAssignableFrom<Coffee>(coffee);
         }
+
+        [Fact]
+        public void UpdateCoffee_Returns_Coffee()
+        {
+            //Setup DbContext and DbSet mock
+            var dbContextMock = new Mock<CoffeeClubContext>();
+            var dbSetMock = new Mock<DbSet<Coffee>>();
+            dbSetMock.Setup(s => s.FindAsync(It.IsAny<int>(), It.IsAny<bool>())).Returns(ValueTask.FromResult(new Coffee()));
+            dbContextMock.Setup(s => s.Set<Coffee>()).Returns(dbSetMock.Object);
+
+            _mockRepo.Setup(p => p.UpdateCoffee(new Coffee()));
+            var coffeeRepoMock = _mockRepo.Object;
+            var coffee = new Coffee() { CoffeeId = 1, CoffeeName = "some coffee name", CoffeePrice = 5.00, CountryOfOrigin = "somecountry" };
+            coffeeRepoMock.UpdateCoffee(coffee);
+
+            //Assert
+            Assert.NotNull(coffee);
+            Assert.IsAssignableFrom<Coffee>(coffee);
+        }
     }
 }
