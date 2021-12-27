@@ -26,17 +26,19 @@ namespace CoffeeClub.Controllers
             _mapper = mapper;
         }
 
-        //[HttpGet(Name = "GetComments")]
-        //public async Task<IActionResult> GetComments()
-        //{
-        //    var comments = await _repository.Comments.GetAllCommentsAsync(trackChanges: false);
+        [HttpGet(Name = "GetComments")]
+        public async Task<IActionResult> GetComments()
+        {
+            var comments = await _repository.Comments.GetAllCommentsAsync(trackChanges: false);
 
-        //    var commentsDto = _mapper.Map<IEnumerable<CommentsDTO>>(comments);
+            var commentsDto = _mapper.Map<IEnumerable<CommentsDTO>>(comments);
 
-        //    return Ok(commentsDto);
-        //}
+            return Ok(commentsDto);
+        }
 
         [HttpGet("{id}", Name = "CommentById")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Comments))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetComment(int id)
         {
             var comment = await _repository.Comments.GetCommentByIdAsync(id, trackChanges: false);
@@ -67,6 +69,9 @@ namespace CoffeeClub.Controllers
         //}
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateCommentForCoffee(int coffeeId, [FromBody] CommentsForCreationDTO comment)
         {
             var coffee = await _repository.Coffee.GetCoffeeByIdAsync(coffeeId, trackChanges: false);
@@ -87,6 +92,10 @@ namespace CoffeeClub.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteComment(int id)
         {
             try
@@ -111,6 +120,10 @@ namespace CoffeeClub.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateComment(int id, [FromBody] CommentsForUpdateDTO comment)
         {
             try
