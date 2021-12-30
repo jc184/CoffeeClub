@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace CoffeeClub.Controllers
 {
+    /// <summary>
+    /// Comments Controller.
+    /// </summary>
     [Route("api/coffee/{coffeeId}/comments")]
     [ApiController]
     public class CommentsController : ControllerBase
@@ -19,6 +22,9 @@ namespace CoffeeClub.Controllers
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Constructor for CommentsController.
+        /// </summary>
         public CommentsController(IRepositoryManager repository, ILoggerManager logger, IMapper mapper)
         {
             _repository = repository;
@@ -26,16 +32,20 @@ namespace CoffeeClub.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet(Name = "GetComments")]
-        public async Task<IActionResult> GetComments()
-        {
-            var comments = await _repository.Comments.GetAllCommentsAsync(trackChanges: false);
+        //[HttpGet(Name = "GetComments")]
+        //public async Task<IActionResult> GetComments()
+        //{
+        //    var comments = await _repository.Comments.GetAllCommentsAsync(trackChanges: false);
 
-            var commentsDto = _mapper.Map<IEnumerable<CommentsDTO>>(comments);
+        //    var commentsDto = _mapper.Map<IEnumerable<CommentsDTO>>(comments);
 
-            return Ok(commentsDto);
-        }
+        //    return Ok(commentsDto);
+        //}
 
+        /// <summary>
+        /// Gets a specific Comment by id.
+        /// </summary>
+        /// <param name="id"></param>
         [HttpGet("{id}", Name = "CommentById")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Comments))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -68,6 +78,10 @@ namespace CoffeeClub.Controllers
         //    return CreatedAtRoute("CommentById", new { id = commentToReturn.CommentId }, commentToReturn);
         //}
 
+        /// <summary>
+        /// Creates a new Comment for a specific Coffee.
+        /// </summary>
+        /// <param name="coffeeId"></param>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -91,6 +105,10 @@ namespace CoffeeClub.Controllers
             return CreatedAtRoute("CommentById", new { coffeeId, id = commentToReturn.CommentId }, commentToReturn);
         }
 
+        /// <summary>
+        /// Deletes a specific Comment.
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -119,6 +137,10 @@ namespace CoffeeClub.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates a specific Comment.
+        /// </summary>
+        /// <param name="id"></param>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

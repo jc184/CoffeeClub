@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace CoffeeClub.Controllers
 {
+    /// <summary>
+    /// Coffee Controller.
+    /// </summary>
     [Route("api/coffee")]
     [ApiController]
     public class CoffeeController : ControllerBase
@@ -20,16 +23,21 @@ namespace CoffeeClub.Controllers
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Constructor for CoffeeController.
+        /// </summary>
         public CoffeeController(IRepositoryManager repository, ILoggerManager logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
             _mapper = mapper;
         }
-    
+
+        /// <summary>
+        /// Gets all Coffees.
+        /// </summary>
         [HttpGet(Name = "GetCoffees")]
-        [ProducesResponseType(typeof(IEnumerable<Coffee>), 200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCoffees()
         {
             var coffees = await _repository.Coffee.GetAllCoffeesAsync(trackChanges: false);
@@ -39,9 +47,14 @@ namespace CoffeeClub.Controllers
             return Ok(coffeesDto);
         }
 
+        /// <summary>
+        /// Gets a specific Coffee by id.
+        /// </summary>
+        /// <param name="id"></param>
         [HttpGet("{id}", Name = "CoffeeById")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Coffee))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public async Task<IActionResult> GetCoffee(int id)
         {
             var coffee = await _repository.Coffee.GetCoffeeByIdAsync(id, trackChanges: false);
@@ -58,7 +71,9 @@ namespace CoffeeClub.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Creates a new Coffee.
+        /// </summary>
         [HttpPost(Name = "CreateCoffee")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -74,12 +89,16 @@ namespace CoffeeClub.Controllers
             return CreatedAtRoute("CoffeeById", new { id = coffeeToReturn.CoffeeId }, coffeeToReturn);
         }
 
-
+        /// <summary>
+        /// Deletes a specific Coffee.
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesDefaultResponseType]
         public async Task<IActionResult> DeleteCoffee(int id)
         {
             try
@@ -109,11 +128,16 @@ namespace CoffeeClub.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates a specific Coffee.
+        /// </summary>
+        /// <param name="id"></param>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesDefaultResponseType]
         public async Task<IActionResult> UpdateCoffee(int id, [FromBody] CoffeeForUpdateDTO coffee)
         {
             try
@@ -151,10 +175,15 @@ namespace CoffeeClub.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets a specific Coffee with related comments.
+        /// </summary>
+        /// <param name="id"></param>
         [HttpGet("{id}/comments")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Coffee))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesDefaultResponseType]
         public async Task<IActionResult> GetCoffeeWithDetails(int id)
         {
             try
