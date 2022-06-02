@@ -132,6 +132,7 @@ namespace CoffeeClub.Controllers
         /// Updates a specific Coffee.
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="coffee"></param>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]

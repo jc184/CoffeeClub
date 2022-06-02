@@ -82,6 +82,7 @@ namespace CoffeeClub.Controllers
         /// Creates a new Comment for a specific Coffee.
         /// </summary>
         /// <param name="coffeeId"></param>
+        /// <param name="comment"></param>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -141,6 +142,7 @@ namespace CoffeeClub.Controllers
         /// Updates a specific Comment.
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="comment"></param>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
