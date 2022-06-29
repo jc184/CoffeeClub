@@ -60,6 +60,7 @@ namespace CoffeeClubUnitTests
 
         }
 
+
         //[Fact]
         //public async Task CreateCoffee_Returns_Coffee()
         //{
@@ -75,7 +76,7 @@ namespace CoffeeClubUnitTests
         //    // Act
         //    Coffee coffee = new Coffee();
         //    CoffeeForCreationDTO coffeeDto = new CoffeeForCreationDTO() { CoffeeName = "somename", CoffeePrice = 5.00, CountryOfOrigin = "somecountry" };
-            
+
         //    //var mappedCoffee = mockMapper.Object.Map(coffee, coffeeDto);
         //    var actionResult = controller.CreateCoffee(coffeeDto).Result;
         //    //var result = actionResult.Result;
