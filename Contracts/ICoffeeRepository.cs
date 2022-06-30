@@ -13,7 +13,7 @@ namespace Contracts
         Task<Coffee> GetCoffeeByIdAsync(int coffeeId, bool trackChanges);
         Task<Coffee> GetCoffeeWithDetailsAsync(int coffeeId, bool trackChanges);
         void CreateCoffee(Coffee coffee);
-        void UpdateCoffee(Coffee owner);
-        void DeleteCoffee(Coffee owner);
+        void UpdateCoffee(Coffee coffee);
+        void DeleteCoffee(Coffee coffee);
     }
 }

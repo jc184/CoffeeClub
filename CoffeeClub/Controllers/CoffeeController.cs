@@ -84,9 +84,9 @@ namespace CoffeeClub.Controllers
             _repository.Coffee.CreateCoffee(coffeeEntity);
             await _repository.SaveAsync();
 
-            var coffeeToReturn = _mapper.Map<CoffeeDTO>(coffeeEntity);
+            var coffeeToReturn = _mapper.Map<CoffeeForCreationDTO>(coffeeEntity);
 
-            return CreatedAtRoute("CoffeeById", new { id = coffeeToReturn.CoffeeId }, coffeeToReturn);
+            return CreatedAtRoute("CoffeeById", coffeeToReturn);
         }
 
         /// <summary>

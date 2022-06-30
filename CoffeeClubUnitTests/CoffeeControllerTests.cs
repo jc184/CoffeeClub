@@ -16,79 +16,203 @@ namespace CoffeeClubUnitTests
 {
     public class CoffeeControllerTests
     {
-
         [Fact]
-        public async Task GetCoffees_Returns_AllCoffees()
+        public async Task GetAllCoffees_Returns_AllCoffees()
         {
             // Arrange
-            var mockRepo = new Mock<IRepositoryManager>();
             var mockLogger = new Mock<ILoggerManager>();
+            var mockCoffeeRepository = new Mock<IRepositoryManager>();
+            mockCoffeeRepository.Setup(repo => repo.Coffee.GetAllCoffeesAsync(It.IsAny<bool>())).Returns(Task.FromResult(new List<Coffee>()));
             var mockMapper = new Mock<IMapper>();
-            mockRepo.Setup(repo => repo.Coffee.GetAllCoffeesAsync(It.IsAny<bool>())).Returns(Task.FromResult(new List<Coffee>()));
-
-            var controller = new CoffeeController(mockRepo.Object, mockLogger.Object, mockMapper.Object);
-
+            var coffeeController = new CoffeeController(mockCoffeeRepository.Object, mockLogger.Object, mockMapper.Object);
+            
             // Act
-            var result = await controller.GetCoffees();
+            var result = await coffeeController.GetCoffees();
 
             // Assert
+            //var okResult = Assert.IsType<OkObjectResult>(result);
+            //var returnValue = Assert.IsAssignableFrom<IEnumerable<CoffeeDTO>>(okResult);
+            var coffees = new CoffeeDTO[0];
             var actionResult = Assert.IsAssignableFrom<ActionResult>(result);
-            var model = Assert.IsAssignableFrom<OkObjectResult>(
-                actionResult);
-
+            var model = Assert.IsAssignableFrom<OkObjectResult>(actionResult);
+            Assert.Equal(coffees, model.Value);
         }
 
         [Fact]
         public async Task GetCoffee_Returns_Coffee()
         {
             // Arrange
-            var mockRepo = new Mock<IRepositoryManager>();
             var mockLogger = new Mock<ILoggerManager>();
+            var mockCoffeeRepository = new Mock<IRepositoryManager>();
+            mockCoffeeRepository.Setup(repo => repo.Coffee.GetCoffeeByIdAsync(It.IsAny<int>(), It.IsAny<bool>())).Returns(Task.FromResult(new Coffee()));
             var mockMapper = new Mock<IMapper>();
-            mockRepo.Setup(repo => repo.Coffee.GetCoffeeByIdAsync(It.IsAny<int>(), It.IsAny<bool>())).Returns(Task.FromResult(new Coffee()));
-
-            var controller = new CoffeeController(mockRepo.Object, mockLogger.Object, mockMapper.Object);
+            mockMapper.Setup(x => x.Map<CoffeeDTO>(It.IsAny<Coffee>())).Returns(new CoffeeDTO());
+            var coffeeController = new CoffeeController(mockCoffeeRepository.Object, mockLogger.Object, mockMapper.Object);
 
             // Act
-            int Id = 1; 
-            var result = await controller.GetCoffee(Id);
-
+            var result = await coffeeController.GetCoffee(1);
+            var coffee = new CoffeeDTO() { CoffeeId = 0, CoffeeName = null, CoffeePrice = 0, CountryOfOrigin = null };
             // Assert
-            var actionResult = Assert.IsAssignableFrom<ActionResult>(result);
-            var model = Assert.IsAssignableFrom<OkObjectResult>(
-                actionResult);
-
+            var objectResult = Assert.IsType<OkObjectResult>(result);
+            var model = Assert.IsAssignableFrom<CoffeeDTO>(objectResult.Value);
+            
+            Assert.Equal(coffee.CoffeeId, model.CoffeeId);
+            Assert.Equal(coffee.CoffeeName, model.CoffeeName);
+            Assert.Equal(coffee.CoffeePrice, model.CoffeePrice);
+            Assert.Equal(coffee.CountryOfOrigin, model.CountryOfOrigin);
         }
 
+        [Fact]
+        public async Task GetCoffee_Returns_NotFound()
+        {
+            // Arrange
+            var mockLogger = new Mock<ILoggerManager>();
+            var mockCoffeeRepository = new Mock<IRepositoryManager>();
+            mockCoffeeRepository.Setup(repo => repo.Coffee.GetCoffeeByIdAsync(It.IsAny<int>(), It.IsAny<bool>())).Returns(Task.FromResult((Coffee)null));
+            var mockMapper = new Mock<IMapper>();
+            mockMapper.Setup(x => x.Map<CoffeeDTO>(It.IsAny<Coffee>())).Returns(new CoffeeDTO());
+            var coffeeController = new CoffeeController(mockCoffeeRepository.Object, mockLogger.Object, mockMapper.Object);
+
+            // Act
+            var result = await coffeeController.GetCoffee(-1);
+
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundResult>(result);
+            Assert.Equal(404, notFoundResult.StatusCode);
+        }
 
         //[Fact]
-        //public async Task CreateCoffee_Returns_Coffee()
+        //public async Task GetCoffee_Returns_BadRequest()
         //{
         //    // Arrange
-        //    var mockRepo = new Mock<IRepositoryManager>();
         //    var mockLogger = new Mock<ILoggerManager>();
+        //    var mockCoffeeRepository = new Mock<IRepositoryManager>();
+        //    mockCoffeeRepository.Setup(repo => repo.Coffee.GetCoffeeByIdAsync(It.IsAny<int>(), It.IsAny<bool>())).Returns(Task.FromResult((Coffee)null));
         //    var mockMapper = new Mock<IMapper>();
-        //    mockRepo.Setup(repo => repo.Coffee.CreateCoffee(It.IsAny<Coffee>())).Verifiable();
-
-        //    string name = null;
-        //    var controller = new CoffeeController(mockRepo.Object, mockLogger.Object, mockMapper.Object);
+        //    mockMapper.Setup(x => x.Map<CoffeeDTO>(It.IsAny<Coffee>())).Returns(new CoffeeDTO());
+        //    var coffeeController = new CoffeeController(mockCoffeeRepository.Object, mockLogger.Object, mockMapper.Object);
 
         //    // Act
-        //    Coffee coffee = new Coffee();
-        //    CoffeeForCreationDTO coffeeDto = new CoffeeForCreationDTO() { CoffeeName = "somename", CoffeePrice = 5.00, CountryOfOrigin = "somecountry" };
+        //    var result = await coffeeController.GetCoffee(0);
 
-        //    //var mappedCoffee = mockMapper.Object.Map(coffee, coffeeDto);
-        //    var actionResult = controller.CreateCoffee(coffeeDto).Result;
-        //    //var result = actionResult.Result;
-        //    CreatedAtRouteResult carResult = actionResult as CreatedAtRouteResult;
         //    // Assert
-        //    //var actionResult = Assert.IsAssignableFrom<CreatedAtRouteResult>(result).Value;
-        //    //var model = Assert.IsAssignableFrom<OkObjectResult>(
-        //    //    actionResult);
-        //    //Assert.NotNull(createdResult);
-        //    //Assert.Equal("DefaultApi", createdResult.RouteName);
-        //    //Assert.NotNull(createdResult.RouteValues["id"]);
-        //    Assert.IsType<CreatedAtRouteResult>(carResult);
+        //    var badRequestResult = Assert.IsType<BadRequestResult>(result);
+        //    Assert.Equal(400, badRequestResult.StatusCode);
         //}
+
+        [Fact]
+        public async Task CreateCoffee_Returns_Coffee()
+        {
+            // Arrange
+            var mockLogger = new Mock<ILoggerManager>();
+            var mockCoffeeRepository = new Mock<IRepositoryManager>();
+            mockCoffeeRepository.Setup(repo => repo.Coffee.CreateCoffee(It.IsAny<Coffee>()));
+            var mockMapper = new Mock<IMapper>();
+            mockMapper.Setup(x => x.Map<CoffeeForCreationDTO>(It.IsAny<Coffee>())).Returns(new CoffeeForCreationDTO());
+            var coffeeController = new CoffeeController(mockCoffeeRepository.Object, mockLogger.Object, mockMapper.Object);
+            var coffee = new CoffeeForCreationDTO() { CoffeeName = null, CoffeePrice = 0, CountryOfOrigin = null };
+            // Act
+            var result = await coffeeController.CreateCoffee(coffee);
+            // Assert
+            var objectResult = Assert.IsType<CreatedAtRouteResult>(result);
+            var model = Assert.IsAssignableFrom<CoffeeForCreationDTO>(objectResult.Value);
+            Assert.Equal(coffee.CoffeeName, model.CoffeeName);
+            Assert.Equal(coffee.CoffeePrice, model.CoffeePrice);
+            Assert.Equal(coffee.CountryOfOrigin, model.CountryOfOrigin);
+        }
+
+        //[Fact]
+        //public async Task CreateCoffee_Returns_BadRequest()
+        //{
+        //    // Arrange
+        //    var mockLogger = new Mock<ILoggerManager>();
+        //    var mockCoffeeRepository = new Mock<IRepositoryManager>();
+        //    var mockMapper = new Mock<IMapper>();
+        //    mockMapper.Setup(x => x.Map<CoffeeForCreationDTO>(It.IsAny<Coffee>())).Returns(new CoffeeForCreationDTO());
+        //    var coffeeController = new CoffeeController(mockCoffeeRepository.Object, mockLogger.Object, mockMapper.Object);
+        //    //var coffee = new CoffeeForCreationDTO() { CoffeeName = null, CoffeePrice = 0, CountryOfOrigin = null };
+        //    // Act
+        //    var result = await coffeeController.CreateCoffee(null);
+        //    // Assert
+        //    var badRequestResult = Assert.IsType<BadRequestResult>(result);
+        //    Assert.Equal(400, badRequestResult.StatusCode);
+        //}
+
+        //[Fact]
+        //public async Task UpdateCoffee_Returns_Coffee()
+        //{
+        //    // Arrange
+        //    var mockLogger = new Mock<ILoggerManager>();
+        //    var mockCoffeeRepository = new Mock<IRepositoryManager>();
+        //    mockCoffeeRepository.Setup(repo => repo.Coffee.UpdateCoffee(It.IsAny<Coffee>()));
+        //    var mockMapper = new Mock<IMapper>();
+        //    mockMapper.Setup(x => x.Map<CoffeeForUpdateDTO>(It.IsAny<Coffee>())).Returns(new CoffeeForUpdateDTO());
+        //    var coffeeController = new CoffeeController(mockCoffeeRepository.Object, mockLogger.Object, mockMapper.Object);
+        //    var coffee = new CoffeeForUpdateDTO() { CoffeeName = null, CoffeePrice = 0, CountryOfOrigin = null };
+        //    int id = 0;
+        //    // Act
+        //    var result = await coffeeController.UpdateCoffee(id, coffee);
+        //    // Assert
+        //    var objectResult = Assert.IsType<NoContentResult>(result);
+        //    var model = Assert.IsAssignableFrom<CoffeeForUpdateDTO>(objectResult);
+        //    Assert.Equal(coffee.CoffeeName, model.CoffeeName);
+        //    Assert.Equal(coffee.CoffeePrice, model.CoffeePrice);
+        //    Assert.Equal(coffee.CountryOfOrigin, model.CountryOfOrigin);
+        //}
+
+        [Fact]
+        public async Task UpdateCoffee_Returns_NotFound()
+        {
+            // Arrange
+            var mockLogger = new Mock<ILoggerManager>();
+            var mockCoffeeRepository = new Mock<IRepositoryManager>();
+            mockCoffeeRepository.Setup(repo => repo.Coffee.UpdateCoffee(It.IsAny<Coffee>()));
+            var mockMapper = new Mock<IMapper>();
+            mockMapper.Setup(x => x.Map<CoffeeForUpdateDTO>(It.IsAny<Coffee>())).Returns(new CoffeeForUpdateDTO());
+            var coffeeController = new CoffeeController(mockCoffeeRepository.Object, mockLogger.Object, mockMapper.Object);
+            var coffee = new CoffeeForUpdateDTO() { CoffeeName = null, CoffeePrice = 0, CountryOfOrigin = null };
+            int id = 0;
+            // Act
+            var result = await coffeeController.UpdateCoffee(id, coffee);
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundResult>(result);
+            Assert.Equal(404, notFoundResult.StatusCode);
+        }
+
+        //[Fact]
+        //public async Task DeleteCoffee_Returns_NoContent()
+        //{
+        //    // Arrange
+        //    var mockLogger = new Mock<ILoggerManager>();
+        //    var mockCoffeeRepository = new Mock<IRepositoryManager>();
+        //    mockCoffeeRepository.Setup(repo => repo.Coffee.DeleteCoffee(It.IsAny<Coffee>()));
+        //    var mockMapper = new Mock<IMapper>();
+        //    mockMapper.Setup(x => x.Map<CoffeeDTO>(It.IsAny<Coffee>()));
+        //    var coffeeController = new CoffeeController(mockCoffeeRepository.Object, mockLogger.Object, mockMapper.Object);
+        //    int id = 0;
+        //    // Act
+        //    var result = await coffeeController.DeleteCoffee(id);
+        //    // Assert
+        //    var noContentResult = Assert.IsType<NoContentResult>(result);
+        //    Assert.Equal(204, noContentResult.StatusCode);
+        //}
+
+        [Fact]
+        public async Task DeleteCoffee_Returns_NotFound()
+        {
+            // Arrange
+            var mockLogger = new Mock<ILoggerManager>();
+            var mockCoffeeRepository = new Mock<IRepositoryManager>();
+            mockCoffeeRepository.Setup(repo => repo.Coffee.DeleteCoffee(It.IsAny<Coffee>()));
+            var mockMapper = new Mock<IMapper>();
+            mockMapper.Setup(x => x.Map<CoffeeDTO>(It.IsAny<Coffee>())).Returns(new CoffeeDTO());
+            var coffeeController = new CoffeeController(mockCoffeeRepository.Object, mockLogger.Object, mockMapper.Object);
+            int id = 1;
+            // Act
+            var result = await coffeeController.DeleteCoffee(id);
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundResult>(result);
+            Assert.Equal(404, notFoundResult.StatusCode);
+        }
     }
 }

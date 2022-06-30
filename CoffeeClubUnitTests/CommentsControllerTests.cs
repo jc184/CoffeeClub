@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CoffeeClub.Controllers;
 using Contracts;
+using Entities.DTOs;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
