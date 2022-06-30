@@ -14,9 +14,18 @@ namespace Entities
         {
 
         }
-        public CoffeeClubContext(DbContextOptions options)
+        public CoffeeClubContext(DbContextOptions<CoffeeClubContext> options)
             : base(options)
         {
+        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseInMemoryDatabase("InMemoryDb");
+        //}
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Coffee>().HasMany(s => s.Comments);
         }
         public DbSet<Coffee> Coffees { get; set; }
         public DbSet<Comments> Comments { get; set; }
