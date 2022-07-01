@@ -29,17 +29,18 @@ namespace CoffeeClubUnitTests
             dbSetMock.Setup(s => s.FindAsync(It.IsAny<int>(), It.IsAny<bool>())).Returns(ValueTask.FromResult(new Comments()));
             dbContextMock.Setup(s => s.Set<Comments>()).Returns(dbSetMock.Object);
 
-            _mockRepo.Setup(p => p.GetCommentByIdAsync(It.IsAny<int>(), It.IsAny<bool>())).Returns(Task.FromResult(new Comments()));
+            IEnumerable<Comments> rtnResult = new List<Comments>();
+            _mockRepo.Setup(p => p.GetCommentsByIdAsync(It.IsAny<int>(), It.IsAny<bool>())).Returns(Task.FromResult(rtnResult));
             var commentsRepoMock = _mockRepo.Object;
 
             //Execute method of SUT (CoffeeRepository)
             int commentId = 1;
             bool trackChanges = false;
-            var comment = commentsRepoMock.GetCommentByIdAsync(commentId, trackChanges).Result;
+            var comments = commentsRepoMock.GetCommentsByIdAsync(commentId, trackChanges).Result;
 
             //Assert
-            Assert.NotNull(comment);
-            Assert.IsAssignableFrom<Comments>(comment);
+            Assert.NotNull(comments);
+            Assert.IsAssignableFrom<List<Comments>>(comments);
         }
 
         [Fact]

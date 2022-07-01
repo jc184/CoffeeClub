@@ -78,7 +78,7 @@ namespace Entities
                         context.Coffees.Add(coffee10);
                     }
 
-                    // Add sample assets
+                    // Add sample comments
                     if (!context.Comments.Any())
                     {
                         var comment1 = new Comments()

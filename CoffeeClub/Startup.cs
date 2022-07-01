@@ -5,21 +5,15 @@ using FluentValidation.AspNetCore;
 using LoggerService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Repository;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace CoffeeClub
 {
@@ -70,6 +64,7 @@ namespace CoffeeClub
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
             services.AddScoped<IRepositoryManager, RepositoryManager>();
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<ILoggerManager, LoggerManager>();
 
         }
@@ -100,15 +95,6 @@ namespace CoffeeClub
             {
                 endpoints.MapControllers();
             });
-
-            void SeedDatabase() //can be placed at the very bottom under app.Run()
-            {
-                using (var scope = app.ApplicationServices.CreateScope())
-                {
-                    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
-                    dbInitializer.SeedData();
-                }
-            }
         }
     }
 }

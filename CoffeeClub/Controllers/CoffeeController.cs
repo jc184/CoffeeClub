@@ -19,14 +19,14 @@ namespace CoffeeClub.Controllers
     public class CoffeeController : ControllerBase
     {
 
-        private readonly IRepositoryManager _repository;
+        private readonly IRepositoryWrapper _repository;
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
 
         /// <summary>
         /// Constructor for CoffeeController.
         /// </summary>
-        public CoffeeController(IRepositoryManager repository, ILoggerManager logger, IMapper mapper)
+        public CoffeeController(IRepositoryWrapper repository, ILoggerManager logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
@@ -82,7 +82,7 @@ namespace CoffeeClub.Controllers
             var coffeeEntity = _mapper.Map<Coffee>(coffee);
 
             _repository.Coffee.CreateCoffee(coffeeEntity);
-            await _repository.SaveAsync();
+            _repository.Save();
 
             var coffeeToReturn = _mapper.Map<CoffeeForCreationDTO>(coffeeEntity);
 
@@ -97,36 +97,37 @@ namespace CoffeeClub.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> DeleteCoffee(int id)
+        public async Task<IActionResult> DeleteCoffeeAsync(int id)
         {
-            try
-            {
+            //try
+            //{
                 var coffee = await _repository.Coffee.GetCoffeeByIdAsync(id, trackChanges: false);
                 if (coffee == null)
                 {
                     _logger.LogError($"Coffee with id: {id}, hasn't been found in db.");
                     return NotFound();
                 }
-
-                if (_repository.Comments.GetCommentByIdAsync(id, trackChanges: false).IsCompleted)
+                if (_repository.Comments.GetCommentsByCoffeeIdAsync(id, trackChanges: false).Result.Any<Comments>())
                 {
-                    _logger.LogError($"Cannot delete coffee with id: {id}. It has related comments. Delete those comments first");
-                    return BadRequest("Cannot delete coffee. It has related comments. Delete those comments first");
+                    _logger.LogError($"Coffee with id: {id}, has related comments. Delete them first.");
+                    return BadRequest("Coffee has related comments. Delete them first.");
+                }
+                else
+                {
+                    _repository.Coffee.DeleteCoffee(coffee);
+                    _repository.Save();
+                    return NoContent();
                 }
 
-                _repository.Coffee.DeleteCoffee(coffee);
-                await _repository.SaveAsync();
+            }
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError($"Something went wrong inside DeleteCoffee action: {ex.Message}");
+            //    return StatusCode(500, "Internal server error");
+            //}
 
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside DeleteCoffee action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-        }
+        
 
         /// <summary>
         /// Updates a specific Coffee.
@@ -165,7 +166,7 @@ namespace CoffeeClub.Controllers
                 _mapper.Map(coffee, coffeeEntity);
 
                 _repository.Coffee.UpdateCoffee(coffeeEntity);
-               await _repository.SaveAsync();
+               _repository.Save();
 
                 return NoContent();
             }

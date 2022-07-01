@@ -51,7 +51,7 @@ namespace CoffeeClub.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetComment(int id)
         {
-            var comment = await _repository.Comments.GetCommentByIdAsync(id, trackChanges: false);
+            var comment = await _repository.Comments.GetCommentsByIdAsync(id, trackChanges: false);
 
             if (comment == null)
             {
@@ -119,7 +119,7 @@ namespace CoffeeClub.Controllers
         {
             try
             {
-                var comment = await _repository.Comments.GetCommentByIdAsync(id, trackChanges: false);
+                var comment = _repository.Comments.GetCommentsByIdAsync(id, trackChanges: false).Result.FirstOrDefault();
                 if (comment == null)
                 {
                     _logger.LogError($"Comment with id: {id}, hasn't been found in db.");
@@ -164,7 +164,7 @@ namespace CoffeeClub.Controllers
                     return BadRequest("Invalid model object");
                 }
 
-                var commentEntity = await _repository.Comments.GetCommentByIdAsync(id, trackChanges: false);
+                var commentEntity = _repository.Comments.GetCommentsByIdAsync(id, trackChanges: false).Result.FirstOrDefault();
                 if (commentEntity == null)
                 {
                     _logger.LogError($"Comment with id: {id}, hasn't been found in db.");

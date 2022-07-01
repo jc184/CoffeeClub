@@ -32,11 +32,14 @@ namespace Repository
                 .OrderBy(co => co.Comment)
                 .ToListAsync();
 
+        
+        public async Task<IEnumerable<Comments>> GetCommentsByIdAsync(int commentId, bool trackChanges) =>
+          await FindByCondition(comment => comment.CommentId.Equals(commentId), trackChanges)
+            .ToListAsync();
 
-        public async Task<Comments> GetCommentByIdAsync(int commentId, bool
-            trackChanges) =>
-            await FindByCondition(comment => comment.CommentId.Equals(commentId), trackChanges)
-            .SingleOrDefaultAsync();
+        public async Task<IEnumerable<Comments>> GetCommentsByCoffeeIdAsync(int coffeeId, bool trackChanges) =>
+            await FindByCondition(comment => comment.CommentId.Equals(coffeeId), trackChanges)
+            .ToListAsync();
 
         public void UpdateComment(Comments comment)
         {
