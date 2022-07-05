@@ -1,5 +1,5 @@
 # CoffeeClub
-This is an ASP.NET Core 5.0 Web API Project.
+This is an ASP.NET Core 5.0 Web API Project that adheres to the Repository Pattern.
 It contains a SQL create script that will create a SQL Server database 'CoffeeClub' which should be run first before running the project.
 Alternatively, just clone the repo as it is and you can immediately try out the API using Swagger and an InMemory Database that is initialized
 automatically on starting the application.
