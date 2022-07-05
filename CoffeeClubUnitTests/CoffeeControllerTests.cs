@@ -5,10 +5,7 @@ using Entities.DTOs;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -16,7 +13,7 @@ namespace CoffeeClubUnitTests
 {
     public class CoffeeControllerTests
     {
-        
+
         [Fact]
         public async Task GetAllCoffees_Returns_AllCoffees()
         {
@@ -26,7 +23,7 @@ namespace CoffeeClubUnitTests
             mockCoffeeRepository.Setup(repo => repo.Coffee.GetAllCoffeesAsync(It.IsAny<bool>())).Returns(Task.FromResult(new List<Coffee>()));
             var mockMapper = new Mock<IMapper>();
             var coffeeController = new CoffeeController(mockCoffeeRepository.Object, mockLogger.Object, mockMapper.Object);
-            
+
             // Act
             var result = await coffeeController.GetCoffees();
 
@@ -54,7 +51,7 @@ namespace CoffeeClubUnitTests
             // Assert
             var objectResult = Assert.IsType<OkObjectResult>(result);
             var model = Assert.IsAssignableFrom<CoffeeDTO>(objectResult.Value);
-            
+
             Assert.Equal(coffee.CoffeeId, model.CoffeeId);
             Assert.Equal(coffee.CoffeeName, model.CoffeeName);
             Assert.Equal(coffee.CoffeePrice, model.CoffeePrice);

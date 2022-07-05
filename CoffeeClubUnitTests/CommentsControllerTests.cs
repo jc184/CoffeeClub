@@ -52,9 +52,8 @@ namespace CoffeeClubUnitTests
 
             // Assert
             var actionResult = Assert.IsAssignableFrom<ActionResult>(result);
-            var model = Assert.IsAssignableFrom<OkObjectResult>(
-                actionResult);
-
+            var model = Assert.IsAssignableFrom<OkObjectResult>(actionResult);
+            Assert.Equal(200, model.StatusCode);
         }
     }
 }
