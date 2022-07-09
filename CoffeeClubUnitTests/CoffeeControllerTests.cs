@@ -141,9 +141,9 @@ namespace CoffeeClubUnitTests
             // Arrange
             var mockLogger = new Mock<ILoggerManager>();
             var mockCoffeeRepository = new Mock<IRepositoryWrapper>();
-            mockCoffeeRepository.Setup(repo => repo.Coffee.GetCoffeeByIdAsync(It.IsAny<int>(), It.IsAny<bool>())).Returns(Task.FromResult(new Coffee()));
+            mockCoffeeRepository.Setup(repo => repo.Coffee.GetCoffeeByIdAsync(It.IsAny<int>(), It.IsAny<bool>())).Returns(Task.FromResult((Coffee)null));
             var mockMapper = new Mock<IMapper>();
-            mockMapper.Setup(x => x.Map<CoffeeDTO>(It.IsAny<Coffee>())).Returns(new CoffeeDTO());
+            mockMapper.Setup(x => x.Map<CoffeeDTO>(It.IsAny<Coffee>())).Returns((CoffeeDTO)null);
             var coffeeController = new CoffeeController(mockCoffeeRepository.Object, mockLogger.Object, mockMapper.Object);
             var mockCommentsRepository = new Mock<IRepositoryManager>();
             IEnumerable<Comments> resultValue = new List<Comments>();
