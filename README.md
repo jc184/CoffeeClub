@@ -5,6 +5,7 @@ Alternatively, just clone the repo as it is and you can immediately try out the 
 automatically on starting the application.
 Note: For logging to work properly once the project has been downloaded, built and run, it will be necessary to edit the nlog.config file
 to use the correct installation directory. This is self explanatory.
+The application now includes both Unit Tests and Integration Tests.
 
 ## Support :telephone:
 
