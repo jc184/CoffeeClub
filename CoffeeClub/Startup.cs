@@ -5,6 +5,7 @@ using FluentValidation.AspNetCore;
 using LoggerService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +35,19 @@ namespace CoffeeClub
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
             services
-                .AddMvcCore()
+                .AddMvcCore(options =>
+                {
+                    options.AllowEmptyInputInBodyModelBinding = true;
+                    foreach (var formatter in options.InputFormatters)
+                    {
+                        if (formatter.GetType() == typeof(SystemTextJsonInputFormatter))
+                            ((SystemTextJsonInputFormatter)formatter).SupportedMediaTypes.Add(
+                            Microsoft.Net.Http.Headers.MediaTypeHeaderValue.Parse("text/plain"));
+                    }
+                }).AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                })
                 .AddApiExplorer()
                 .AddFluentValidation(s =>
                 {
@@ -47,14 +60,6 @@ namespace CoffeeClub
             //        options.UseSqlServer(Configuration.GetConnectionString("sqlConnection")));
             services.AddDbContext<CoffeeClubContext>(optionsBuilder => optionsBuilder.UseInMemoryDatabase("InMemoryDb"));
             services.AddScoped<IDbInitializer, DbInitializer>();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CoffeeClub", Version = "v1" });
-                // Set the comments path for the Swagger JSON and UI.
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-            });
             // Auto Mapper Configurations
             var mapperConfig = new MapperConfiguration(mc =>
             {
@@ -63,6 +68,15 @@ namespace CoffeeClub
 
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CoffeeClub", Version = "v1" });
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+            
             services.AddScoped<IRepositoryManager, RepositoryManager>();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<ILoggerManager, LoggerManager>();

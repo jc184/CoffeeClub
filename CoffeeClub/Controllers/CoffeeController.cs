@@ -77,7 +77,7 @@ namespace CoffeeClub.Controllers
         [HttpPost(Name = "CreateCoffee")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateCoffee([FromBody]  CoffeeForCreationDTO coffee)
+        public async Task<IActionResult> CreateCoffee([FromForm] CoffeeForCreationDTO coffee)
         {
             var coffeeEntity = _mapper.Map<Coffee>(coffee);
 
@@ -86,7 +86,7 @@ namespace CoffeeClub.Controllers
 
             var coffeeToReturn = _mapper.Map<CoffeeForCreationDTO>(coffeeEntity);
 
-            return CreatedAtRoute("CoffeeById", coffeeToReturn);
+            return CreatedAtRoute("CreateCoffee", coffeeToReturn);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace CoffeeClub.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> UpdateCoffee(int id, [FromBody] CoffeeForUpdateDTO coffee)
+        public async Task<IActionResult> UpdateCoffee(int id, [FromForm] CoffeeForUpdateDTO coffee)
         {
             try
             {

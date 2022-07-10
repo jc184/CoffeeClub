@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Entities.DTOs;
 using Entities.Models;
 
@@ -14,7 +10,7 @@ namespace CoffeeClub
         {
             CreateMap<Coffee, CoffeeDTO>();
             CreateMap<Comments, CommentsDTO>();
-            CreateMap<CoffeeForCreationDTO, Coffee>();
+            CreateMap<CoffeeForCreationDTO, Coffee>().ReverseMap();
             CreateMap<CoffeeForUpdateDTO, Coffee>();
             CreateMap<CommentsForCreationDTO, Comments>();
             CreateMap<CommentsForUpdateDTO, Comments>();
