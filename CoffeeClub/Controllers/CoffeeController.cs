@@ -140,7 +140,7 @@ namespace CoffeeClub.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> UpdateCoffee(int id, [FromBody] CoffeeForUpdateDTO coffee)
+        public async Task<IActionResult> UpdateCoffee(int id, [FromForm] CoffeeForUpdateDTO coffee)
         {
             try
             {

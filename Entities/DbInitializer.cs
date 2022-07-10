@@ -76,6 +76,10 @@ namespace Entities
                         var coffee10 = new Coffee()
                         { CoffeeId = 10, CoffeeName = "Coffee", CoffeePrice = 2.5, CountryOfOrigin = "Brazil" };
                         context.Coffees.Add(coffee10);
+
+                        var coffee11 = new Coffee()
+                        { CoffeeId = 11, CoffeeName = "Test Coffee", CoffeePrice = 2.99, CountryOfOrigin = "Test Country" };
+                        context.Coffees.Add(coffee11);
                     }
 
                     // Add sample comments
