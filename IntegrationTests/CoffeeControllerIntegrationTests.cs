@@ -1,12 +1,9 @@
-﻿using AutoMapper;
-using CoffeeClub;
+﻿using CoffeeClub;
 using Entities.DTOs;
 using Entities.Models;
-using Moq;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,8 +29,11 @@ namespace IntegrationTests
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
 
+            var coffees = JsonConvert.DeserializeObject<List<Coffee>>(responseString);
+
             Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
             Assert.Contains("{\"coffeeId\":1,\"coffeeName\":\"Cappuccino\",\"coffeePrice\":2.5,\"countryOfOrigin\":\"Italy\"}", responseString);
+            Assert.True(coffees.Count > 0);
         }
 
         [Fact]
@@ -51,20 +51,29 @@ namespace IntegrationTests
             Assert.Contains("{\"coffeeId\":1,\"coffeeName\":\"Cappuccino\",\"coffeePrice\":2.5,\"countryOfOrigin\":\"Italy\"}", responseString);
         }
 
-        //[Fact]
-        //public async Task Create_POST_Action()
-        //{
-        //    var payload = new CoffeeForCreationDTO() { CoffeeName = "Bolivian Blend", CoffeePrice = 2.99, CountryOfOrigin = "Bolivia" };
-        //    //HttpContent content = new StringContent(payload.ToString(), Encoding.UTF8, "application/json");
-        //    var content = new StringContent(JsonConvert.SerializeObject(payload.ToString()), Encoding.UTF8, "application/json");
-        //    // Act
-        //    var response = await _client.PostAsync("/api/coffee", content);
 
-        //    // Assert
-        //    response.EnsureSuccessStatusCode();
-        //    var responseString = await response.Content.ReadAsStringAsync();
+        [Fact]
+        public async Task Create_WhenPOSTExecuted_CreatedCoffee()
+        {
+            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/api/coffee");
 
-        //    Assert.Contains("Create Record", responseString);
-        //}
+            var formModel = new Dictionary<string, string>
+            {
+                { "CoffeeName", "Bolivian Blend" },
+                { "CoffeePrice", "2.99" },
+                { "CountryOfOrigin", "Bolivia" }
+            };
+
+            postRequest.Content = new FormUrlEncodedContent(formModel);
+
+            var response = await _client.SendAsync(postRequest);
+
+            response.EnsureSuccessStatusCode();
+
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("{\"coffeeName\":\"Bolivian Blend\",\"coffeePrice\":2.99,\"countryOfOrigin\":\"Bolivia\"}", responseString);
+
+        }
     }
 }
