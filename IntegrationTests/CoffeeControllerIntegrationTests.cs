@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -52,48 +53,82 @@ namespace IntegrationTests
         }
 
 
+        //[Fact]
+        //public async Task Create_WhenPOSTExecuted_CreateCoffee()
+        //{
+        //    var postRequest = new HttpRequestMessage(HttpMethod.Post, "/api/coffee");
+
+        //    var formModel = new Dictionary<string, string>
+        //    {
+        //        { "CoffeeName", "Bolivian Blend" },
+        //        { "CoffeePrice", "2.99" },
+        //        { "CountryOfOrigin", "Bolivia" }
+        //    };
+
+        //    postRequest.Content = new FormUrlEncodedContent(formModel);
+
+        //    var response = await _client.SendAsync(postRequest);
+
+        //    response.EnsureSuccessStatusCode();
+
+        //    var responseString = await response.Content.ReadAsStringAsync();
+
+        //    Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
+        //    Assert.Contains("{\"coffeeName\":\"Bolivian Blend\",\"coffeePrice\":2.99,\"countryOfOrigin\":\"Bolivia\"}", responseString);
+
+        //}
+
         [Fact]
         public async Task Create_WhenPOSTExecuted_CreateCoffee()
         {
-            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/api/coffee");
-
-            var formModel = new Dictionary<string, string>
+            var coffee = new
             {
-                { "CoffeeName", "Bolivian Blend" },
-                { "CoffeePrice", "2.99" },
-                { "CountryOfOrigin", "Bolivia" }
+                coffeeId = 1,
+                coffeeName = "TestName",
+                coffeePrice = 2.99,
+                countryOfOrigin = "TestCountry"
             };
 
-            postRequest.Content = new FormUrlEncodedContent(formModel);
+            var coffeeObj = JsonConvert.SerializeObject(coffee);
 
-            var response = await _client.SendAsync(postRequest);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(coffeeObj);
+            var byteContent = new ByteArrayContent(buffer);
+
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var response = await _client.PostAsync("/api/coffee", byteContent);
 
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync();
 
             Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
-            Assert.Contains("{\"coffeeName\":\"Bolivian Blend\",\"coffeePrice\":2.99,\"countryOfOrigin\":\"Bolivia\"}", responseString);
-
+            Assert.Contains("{\"coffeeName\":\"TestName\",\"coffeePrice\":2.99,\"countryOfOrigin\":\"TestCountry\"}", responseString);
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
 
         [Fact]
         public async Task Update_WhenPUT_Executed_UpdateCoffee()
         {
-            var postRequest = new HttpRequestMessage(HttpMethod.Put, "/api/coffee/1");
-
-            var formModel = new Dictionary<string, string>
+            var coffee = new
             {
-                { "CoffeeName", "Bolivian Blend" },
-                { "CoffeePrice", "2.99" },
-                { "CountryOfOrigin", "Bolivia" }
+                coffeeId = 1,
+                coffeeName = "TestName",
+                coffeePrice = 2.99,
+                countryOfOrigin = "TestCountry"
             };
 
-            postRequest.Content = new FormUrlEncodedContent(formModel);
+            var coffeeObj = JsonConvert.SerializeObject(coffee);
 
-            var response = await _client.SendAsync(postRequest);
-            
+            var buffer = System.Text.Encoding.UTF8.GetBytes(coffeeObj);
+            var byteContent = new ByteArrayContent(buffer);
+
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var response = await _client.PutAsync("/api/coffee/1", byteContent);
+
             response.EnsureSuccessStatusCode();
+
 
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
