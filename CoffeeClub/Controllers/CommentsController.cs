@@ -60,7 +60,7 @@ namespace CoffeeClub.Controllers
             }
             else
             {
-                var commentDto = _mapper.Map<CommentsDTO>(comment);
+                var commentDto = _mapper.Map<List<CommentsDTO>>(comment);
                 return Ok(commentDto);
             }
         }

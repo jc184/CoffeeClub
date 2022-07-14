@@ -9,7 +9,8 @@ namespace CoffeeClub
         public MappingProfile()
         {
             CreateMap<Coffee, CoffeeDTO>();
-            CreateMap<Comments, CommentsDTO>();
+            CreateMap<Comments, CommentsDTO>().ReverseMap();
+            CreateMap<CommentsDTO, Comments>().ReverseMap();
             CreateMap<CoffeeForCreationDTO, Coffee>().ReverseMap();
             CreateMap<CoffeeForUpdateDTO, Coffee>();
             CreateMap<CommentsForCreationDTO, Comments>();
