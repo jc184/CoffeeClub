@@ -1,12 +1,10 @@
 ﻿using CoffeeClub;
-using Entities.DTOs;
 using Entities.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -33,7 +31,7 @@ namespace IntegrationTests
             var coffees = JsonConvert.DeserializeObject<List<Coffee>>(responseString);
 
             Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
-            Assert.Contains("{\"coffeeId\":1,\"coffeeName\":\"Bolivian Blend\",\"coffeePrice\":2.99,\"countryOfOrigin\":\"Bolivia\"}", responseString);
+            Assert.Contains("{\"coffeeId\":1,\"coffeeName\":\"TestName\",\"coffeePrice\":2.99,\"countryOfOrigin\":\"TestCountry\"}", responseString);
             Assert.True(coffees.Count > 0);
         }
 
@@ -49,34 +47,9 @@ namespace IntegrationTests
             var responseString = await response.Content.ReadAsStringAsync();
 
             Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
-            Assert.Contains("{\"coffeeId\":1,\"coffeeName\":\"Bolivian Blend\",\"coffeePrice\":2.99,\"countryOfOrigin\":\"Bolivia\"}", responseString);
+            Assert.Contains("{\"coffeeId\":1,\"coffeeName\":\"TestName\",\"coffeePrice\":2.99,\"countryOfOrigin\":\"TestCountry\"}", responseString);
         }
 
-
-        //[Fact]
-        //public async Task Create_WhenPOSTExecuted_CreateCoffee()
-        //{
-        //    var postRequest = new HttpRequestMessage(HttpMethod.Post, "/api/coffee");
-
-        //    var formModel = new Dictionary<string, string>
-        //    {
-        //        { "CoffeeName", "Bolivian Blend" },
-        //        { "CoffeePrice", "2.99" },
-        //        { "CountryOfOrigin", "Bolivia" }
-        //    };
-
-        //    postRequest.Content = new FormUrlEncodedContent(formModel);
-
-        //    var response = await _client.SendAsync(postRequest);
-
-        //    response.EnsureSuccessStatusCode();
-
-        //    var responseString = await response.Content.ReadAsStringAsync();
-
-        //    Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
-        //    Assert.Contains("{\"coffeeName\":\"Bolivian Blend\",\"coffeePrice\":2.99,\"countryOfOrigin\":\"Bolivia\"}", responseString);
-
-        //}
 
         [Fact]
         public async Task Create_WhenPOSTExecuted_CreateCoffee()
